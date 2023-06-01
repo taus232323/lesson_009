@@ -11,21 +11,21 @@ from random import randint
 
 
 class Chatterer:
-    analize_count = 4
+    analize_count = 3
 
     def __init__(self, file_name):
         self.file_name = file_name
         self.stat = {}
 
-    # def unzip(self):
-    #     zfile = zipfile.ZipFile(self.file_name, 'r')
-    #     for filename in zfile.namelist():
-    #         zfile.extract(filename)
-    #     self.file_name = filename
+    def unzip(self):
+        zfile = zipfile.ZipFile(self.file_name, 'r')
+        for filename in zfile.namelist():
+            zfile.extract(filename)
+        self.file_name = filename
 
     def collect(self):
-        # if self.file_name.endswith('.zip'):
-        #     self.unzip()
+        if self.file_name.endswith('.zip'):
+            self.unzip()
         self.sequence = ' ' * self.analize_count
         with open(self.file_name, 'r', encoding='cp1251') as file:
             for line in file:

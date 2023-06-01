@@ -2,6 +2,7 @@
 from operator import itemgetter
 from pprint import pprint
 
+
 # Подсчитать статистику по буквам в романе Война и Мир.
 # Входные параметры: файл для сканирования
 # Статистику считать только для букв алфавита (см функцию .isalpha() для строк)
@@ -23,30 +24,63 @@ from pprint import pprint
 # Упорядочивание по частоте - по убыванию. Ширину таблицы подберите по своему вкусу
 # Требования к коду: он должен быть готовым к расширению функциональности. Делать сразу на классах.
 
-stat = {}
-file_name = 'voyna-i-mir.txt'
-with open(file_name, 'r', encoding='cp1251') as file:
-    for line in file:
-        for char in line:
-            if char.isalpha() == True:
-                if char in stat:
-                    stat[char] += 1
-                else:
-                    stat[char] = 1
-sorted_dict = sorted(stat.items(), key=lambda x: x[1], reverse=True)
-# pprint(sorted_dict)
+class Counter:
+    stat = {}
 
-print('|{txt:-^31}|'.format(txt='+'))
-print('|{txt1:^15}|{txt2:^15}|'.format(txt1='буква', txt2='частота'))
-print('|{txt:-^31}|'.format(txt='+'))
+    def __init__(self, file_name):
+        self.file_name = file_name
+        self.total = 0
+        self.user = 0
 
-for chars, values in sorted_dict:
-    print(f'|{chars:15}|{values:15}|')
+    def count(self):
+        with open(self.file_name, 'r', encoding='cp1251') as file:
+            for line in file:
+                for char in line:
+                    if char.isalpha() == True:
+                        if char in self.stat:
+                            self.stat[char] += 1
+                        else:
+                            self.stat[char] = 1
+            values_sum = sum(self.stat.values())
+            self.total += values_sum
+
+    def sorting(self):
+        print(' Введи "1" чтобы отсортировать по алфавиту по убыванию, "2" по возрастанию\n '
+              'Введи "3" чтобы отсортировать по количеству по убыванию, "4" по возрастанию')
+        user = int(input('\n Я выбираю: '))
+        if user == 1:
+            sorted_dict = sorted(self.stat.items(), key=lambda x: x[0], reverse=True)
+        elif user == 2:
+            sorted_dict = sorted(self.stat.items(), key=lambda x: x[0], reverse=False)
+        elif user == 3:
+            sorted_dict = sorted(self.stat.items(), key=lambda x: x[1], reverse=True)
+        elif user == 4:
+            sorted_dict = sorted(self.stat.items(), key=lambda x: x[1], reverse=False)
+        else:
+            print('Такой цифры нет!!')
+            return
+        for chars, values in sorted_dict:
+            print(f'|{chars:10}|{values:10}|')
+
+    def head(self):
+        print('+{txt:-^21}+'.format(txt='+'))
+        print('|{txt1:^10}|{txt2:^10}|'.format(txt1='буква', txt2='частота'))
+        print('+{txt:-^21}+'.format(txt='+'))
+
+    def totals(self):
+        print('+{txt:-^21}+'.format(txt='+'))
+        print('|{txt1:^10}|{txt2:^10}|'.format(txt1='Итого', txt2=self.total))
+        print('+{txt:-^21}+'.format(txt='+'))
+
+    def implementation(self):
+        self.count()
+        self.sorting()
+        self.head()
+        self.totals()
 
 
-
-
-# for char, count in stat.items()
+counter = Counter(file_name='voyna-i-mir.txt')
+counter.implementation()
 
 # После выполнения первого этапа нужно сделать упорядочивание статистики
 #  - по частоте по возрастанию
